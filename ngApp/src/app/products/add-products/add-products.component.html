@@ -1,0 +1,155 @@
+<div class="container p-3 formDetails">
+  <div class="heading">
+    <ng-container *ngIf="selectedProductId==-1; then addHader; else listHeader;"></ng-container>
+    <ng-template #addHader>
+      <h1>Add a product</h1>
+    </ng-template>
+    <ng-template #listHeader>
+      <h1>Product Details</h1>
+    </ng-template>
+  </div>
+  <form [formGroup]="product" (ngSubmit)="onSubmit()" (ngReset)="onReset()">
+    <div class="form-group">
+        <div class="row" *ngIf="selectedProductId != -1">
+          <div class="col-sm-2">Image</div>
+          <div class="col-sm-8 text-center mb-3">
+            <img src="{{imageUrl}}"/>
+          </div>
+        </div>
+      <div class="row">
+        <label for="name" class="col-sm-2 col-form-label">Name</label>
+        <div class="col-sm-8">
+          <input type="text" [ngClass]="{ 'is-invalid': (p.name.touched || submitted) && p.name.errors}"
+            formControlName="name" class="form-control" id="name" placeholder="Product name">
+        </div>
+      </div>
+      <div class="row" *ngIf="(p.name.touched || submitted) && p.name.errors">
+        <span class="col-sm-2"></span>
+        <div class="col-sm-8">
+          <small *ngIf="p.name.errors.required" class="text-danger">Product name is required.</small>
+          <small *ngIf="p.name.errors?.pattern" class="text-danger">Product name should be valid and contains alphabetic
+            characters only.</small>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <label for="category" class="col-sm-2 col-form-label">Category</label>
+        <div class="col-sm-8">
+          <select id="inputState" [ngClass]="{ 'is-invalid': (p.category.touched || submitted) && p.category.errors}"
+            formControlName="category" class="form-control">
+            <option selected value="">Product category</option>
+            <option *ngFor="let item of productCategories" value="{{item}}">{{item}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="row" *ngIf="(p.category.touched || submitted) && p.category.errors">
+        <span class="col-sm-2"></span>
+        <div class="col-sm-8">
+          <small *ngIf="p.category.errors?.required" class="text-danger">Product category is required.</small>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <label for="description" class="col-sm-2 col-form-label">Description</label>
+        <div class="col-sm-8">
+          <textarea class="form-control"
+            [ngClass]="{ 'is-invalid': (p.description.touched || submitted) && p.description.errors}" id="description"
+            formControlName="description" placeholder="Product Description" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="row" *ngIf="(p.description.touched || submitted) && p.description.errors">
+        <span class="col-sm-2"></span>
+        <div class="col-sm-8">
+          <small *ngIf="p.description.errors?.required" class="text-danger">Product description is required.</small>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <label for="quantity" class="col-sm-2 col-form-label">Quantity</label>
+        <div class="col-sm-8">
+          <input type="number" [ngClass]="{ 'is-invalid': (p.quantity.touched || submitted) && p.quantity.errors}"
+            class="form-control" formControlName="quantity" id="quantity" min="1" step="1" max="100"
+            placeholder="Product quantity">
+        </div>
+      </div>
+      <div class="row" *ngIf="(p.quantity.touched || submitted) && p.quantity.errors">
+        <span class="col-sm-2"></span>
+        <div class="col-sm-8">
+          <small *ngIf="p.quantity.errors?.required" class="text-danger">Product quantity is required.</small>
+          <small *ngIf="p.quantity.errors?.pattern || p.quantity.errors?.min || p.quantity.errors?.max"
+            class="text-danger">Product quantity should be whole number between 1 to 100.</small>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <label for="cost" class="col-sm-2 col-form-label">Cost</label>
+        <div class="col-sm-8">
+          <input type="number" [ngClass]="{ 'is-invalid': (p.cost.touched || submitted) && p.cost.errors}"
+            class="form-control" formControlName="cost" min=".01" step=".01" id="cost" placeholder="Product cost">
+        </div>
+      </div>
+      <div class="row" *ngIf="(p.cost.touched || submitted) && p.cost.errors">
+        <span class="col-sm-2"></span>
+        <div class="col-sm-8">
+          <small *ngIf="p.cost.errors?.required" class="text-danger">Product cost is required.</small>
+          <small *ngIf="p.cost.errors?.pattern || p.cost.errors?.min" class="text-danger">Product cost should be valid
+            amount upto 2 decimal digit.</small>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <label for="currency" class="col-sm-2 col-form-label">Currency</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control"
+            [ngClass]="{ 'is-invalid': (p.currency.touched || submitted) && p.currency.errors}"
+            formControlName="currency" id="currency" maxlength="3" placeholder="Product currency">
+        </div>
+      </div>
+      <div class="row" *ngIf="(p.currency.touched || submitted) && p.currency.errors">
+        <span class="col-sm-2"></span>
+        <div class="col-sm-8">
+          <small *ngIf="p.currency.errors?.required" class="text-danger">Product currency code is required.</small>
+          <small *ngIf="p.currency.errors?.pattern" class="text-danger">Product currency code should be a three digit
+            valid number.</small>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+        <div class="row" *ngIf="selectedProductId == -1">
+          <div class="col-sm-2">Image</div>
+          <div class="col-sm-8">
+            <input type="file" class="custom-file-input" (change)="fileChanged($event)"
+              [ngClass]="{ 'is-invalid': (p.image.touched || submitted) && p.image.errors}" formControlName="image"
+              class="form-control" id="image">
+            <label class="custom-file-label image-lbl" for="image">{{p.image.value ? p.image.value : 'Product Image'}}</label>
+          </div>
+        </div>
+        <div class="row" *ngIf="(p.image.touched || submitted) && p.image.errors">
+          <span class="col-sm-2"></span>
+          <div class="col-sm-8">
+            <small *ngIf="p.image.errors?.required" class="text-danger">Product image is required.</small>
+            <small *ngIf="p.image.errors?.pattern" class="text-danger">Product image should be of jgp, jpeg or png
+              format.</small>
+          </div>
+        </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-sm-5"></div>
+      <div class="col-sm-4">
+        <ng-container *ngIf="selectedProductId == -1; then addProduct; else productList;"></ng-container>
+        <ng-template #productList>
+          <button type="button" routerLink="/productList" class="btn btn-primary">Go back to product list</button>
+        </ng-template>
+        <ng-template #addProduct>
+          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="reset" class="btn btn-primary ml-2">Reset</button>
+        </ng-template>
+      </div>
+    </div>
+  </form>
+</div>
