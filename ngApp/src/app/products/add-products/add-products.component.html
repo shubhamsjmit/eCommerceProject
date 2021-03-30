@@ -11,8 +11,8 @@
   <form [formGroup]="product" (ngSubmit)="onSubmit()" (ngReset)="onReset()">
     <div class="form-group">
         <div class="row" *ngIf="selectedProductId != -1">
-          <div class="col-sm-2">Image</div>
-          <div class="col-sm-8 text-center mb-3">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-8 text-center mb-3 details-image">
             <img src="{{imageUrl}}"/>
           </div>
         </div>

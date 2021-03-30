@@ -32,3 +32,8 @@
 .description {
   min-height: 96px;
 }
+
+.cardData img {
+  height: 150px;
+  width: 150px;
+}

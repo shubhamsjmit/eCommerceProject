@@ -23,3 +23,7 @@
   padding-left: 10px;
   color: #6a7780;
 }
+
+.details-image img{
+  height: 196px;
+}
